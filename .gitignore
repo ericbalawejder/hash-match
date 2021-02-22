@@ -1,5 +1,1 @@
-# no Go binaries
-**
-!**/*.go
-!.gitignore
-!README.md
+.idea
