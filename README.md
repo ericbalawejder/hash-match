@@ -7,8 +7,10 @@ comparing their [hash](https://pkg.go.dev/crypto).
 $ go run main.go --help
 ```
 The default hashing algorithm is [sha256](https://pkg.go.dev/crypto/sha256). You can explicitly specify an
-algorithm with an optional third flag `--hash=` and provide a 
-[Go supported hashing algorithm](https://pkg.go.dev/crypto#Hash).
+algorithm with an optional third flag `--hash=` and provide a Go supported 
+[hashing algorithm](https://pkg.go.dev/crypto#Hash) with the exception of the 
+[blake2s](https://pkg.go.dev/golang.org/x/crypto/blake2s) and 
+[blake2b](https://pkg.go.dev/golang.org/x/crypto/blake2b) algorithms.
 ```
 $ go run main.go --file1=/PATH/TO/FILE
 ```
@@ -23,7 +25,5 @@ $ go run main.go --file1=/PATH/TO/FILE --file2=/PATH/TO/FILE --hash=md5
 Using the binary:
 ```
 $ go build main.go 
-$ ./main --file1=/PATH/TO/FILE
-$ ./main --file1=/PATH/TO/FILE --file2=/PATH/TO/FILE
-$ ./main --file1=/PATH/TO/FILE --file2=/PATH/TO/FILE --hash=md5
+$ ./main --file1=/PATH/TO/FILE ...
 ```
