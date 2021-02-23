@@ -1,13 +1,26 @@
 package hashing
 
 import (
+	"crypto/md5"
 	"crypto/sha256"
+	"crypto/sha512"
 	"encoding/hex"
+	"hash"
 	"io"
 	"os"
 )
 
-func Sha256Hash(filePath string) (string, error) {
+var algorithms = map[string]hash.Hash{
+	"md5": md5.New(),
+	"sha256": sha256.New(),
+	"sha512": sha512.New(),
+}
+
+func Supported (algorithm string) bool {
+	return algorithms[algorithm] != nil
+}
+
+func ComputeHash(filePath string, algorithm string) (string, error) {
 	_, err := os.Stat(filePath)
 	if os.IsNotExist(err) {
 		return "", err
@@ -23,17 +36,18 @@ func Sha256Hash(filePath string) (string, error) {
 	defer file.Close()
 
 	// Open a new hashing interface to write to.
-	hash := sha256.New()
+	h := algorithms[algorithm]
+	h.Reset()
 
 	// Copy the file in the hashing interface and check for any error.
-	if _, err := io.Copy(hash, file); err != nil {
+	if _, err := io.Copy(h, file); err != nil {
 		return "", err
 	}
 
 	// Get the 32 byte hashing. Define [:16] for 16 bytes.
-	hashInBytes := hash.Sum(nil)//[:16]
+	hashInBytes := h.Sum(nil)//[:16]
 
 	// Convert the bytes to a string
-	sha256Hash := hex.EncodeToString(hashInBytes)
-	return sha256Hash, nil
+	s := hex.EncodeToString(hashInBytes)
+	return s, nil
 }

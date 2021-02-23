@@ -10,6 +10,7 @@ import (
 
 var file1 = flag.String("file1", "", "a file to hash")
 var file2 = flag.String("file2", "", "a file to hash")
+var hashAlgorithm = flag.String("hash", "sha256", "a hashing function")
 
 func main()  {
 	flag.Parse()
@@ -17,9 +18,14 @@ func main()  {
 		log.Fatal("--file argument required")
 	}
 
+	//call hashing.Supported to validate if the "hash" flag is going to work
+	if !hashing.Supported(*hashAlgorithm) {
+		log.Fatal("algorithm not supported")
+	}
+
 	// Operate on file2.
 	if *file1 == "" {
-		hash, err := hashing.Sha256Hash(*file2)
+		hash, err := hashing.ComputeHash(*file2, *hashAlgorithm)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -29,7 +35,7 @@ func main()  {
 
 	// Operate on file1.
 	if *file2 == "" {
-		hash, err := hashing.Sha256Hash(*file1)
+		hash, err := hashing.ComputeHash(*file1, *hashAlgorithm)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -38,8 +44,8 @@ func main()  {
 	}
 
 	// Compare the two file hashes.
-	hash1, err1 := hashing.Sha256Hash(*file1)
-	hash2, err2 := hashing.Sha256Hash(*file2)
+	hash1, err1 := hashing.ComputeHash(*file1, *hashAlgorithm)
+	hash2, err2 := hashing.ComputeHash(*file2, *hashAlgorithm)
 
 	// Check for errors.
 	if err1 != nil && err2 != nil {
