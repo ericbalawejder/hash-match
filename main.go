@@ -18,9 +18,9 @@ func main()  {
 		log.Fatal("--file argument required")
 	}
 
-	//call hashing.Supported to validate if the "hash" flag is going to work
+	// Call hashing.Supported to validate if the "--hash=" argument is valid.
 	if !hashing.Supported(*hashAlgorithm) {
-		log.Fatal("algorithm not supported")
+		log.Fatalf("%s algorithm not supported", *hashAlgorithm)
 	}
 
 	// Operate on file2.
