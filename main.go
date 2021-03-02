@@ -8,19 +8,32 @@ import (
 	"github.com/ericbalawejder/hash-match/hashing"
 )
 
+// Quotes must be used with white space, i.e. --string="two words"
+var sequence = flag.String("string", "", "a string to hash")
 var file1 = flag.String("file1", "", "a file to hash")
 var file2 = flag.String("file2", "", "a file to hash")
 var hashAlgorithm = flag.String("hash", "sha256", "a hashing function")
 
 func main()  {
 	flag.Parse()
-	if *file1 == "" && *file2 == ""{
-		log.Fatal("--file argument required")
-	}
 
 	// Call hashing.Supported to validate if the "--hash=" argument is valid.
 	if !hashing.Supported(*hashAlgorithm) {
 		log.Fatalf("%s algorithm not supported", *hashAlgorithm)
+	}
+
+	// Operate on --string flag.
+	if *sequence != "" {
+		hash, err := hashing.StringDigest(*sequence, *hashAlgorithm)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(hash)
+		return
+	}
+
+	if *file1 == "" && *file2 == ""{
+		log.Fatal("--file argument required")
 	}
 
 	// Operate on file2.
