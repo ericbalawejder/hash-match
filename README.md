@@ -1,6 +1,5 @@
 ### Hash Match
-Produce the hash of a file's contents or check the equality of two file's contents by 
-comparing their [hash](https://pkg.go.dev/crypto).
+Compare the contents of two files based on their [hash](https://pkg.go.dev/crypto).
 
 ##### Usage:
 ```
@@ -22,8 +21,13 @@ or for equality comparison:
 ```
 $ go run main.go --file1=/PATH/TO/FILE --file2=/PATH/TO/FILE --hash=md5
 ```
+`--string` flag allows for string hashing with an optional specified algorithm.
+```
+$ go run main.go --string="a string to hash"
+$ go run main.go --string="a string to hash" --hash=sha512
+```
 Using the binary:
 ```
 $ go build main.go 
-$ ./main --file1=/PATH/TO/FILE ...
+$ ./main --<flag>=
 ```
